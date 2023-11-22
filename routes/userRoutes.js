@@ -20,7 +20,7 @@ router
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
 
-router.post('requestPasswordReset',requestPasswordReset);
-router.post('resetPassword',resetPassword);
+router.post('/requestPasswordReset',requestPasswordReset);
+router.post('/resetPassword',resetPassword);
 
 export default router;
