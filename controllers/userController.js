@@ -10,8 +10,6 @@ import sendEmail from "../utils/email/sendEmail.js";
 const bcryptSalt = process.env.BCRYPT_SALT;
 const clientURL = process.env.CLIENT_URL;
 
-
-
 // @desc    Auth user & get token
 // @route   POST /api/users/auth
 // @access  Public
@@ -127,75 +125,91 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 const requestPasswordReset = asyncHandler(async (req, res) => {
+  try {
+
     const user = await User.findOne(req.email );
-    // console.log(user);
-  
+
     if (!user) {
       return res.status(404).json({ error: "User does not exist" });
     }
-  
+
     let token = await Token.findOne({ userId: user._id });
     if (token) {
       await token.deleteOne();
     }
-  
-    let resetToken = crypto.randomBytes(32).toString("hex");
-    const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
-  
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const hash = await bcrypt.hash(resetToken, Number(process.env.BCRYPT_SALT));
+
     await new Token({
       userId: user._id,
       token: hash,
       createdAt: Date.now(),
     }).save();
-  
-    const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+
+    const link = `${process.env.CLIENT_URL}/passwordReset?token=${resetToken}&id=${user._id}`;
     await sendEmail(
       user.email,
       "Password Reset Request",
       { name: user.name, link: link },
       "./template/requestResetPassword.handlebars"
     );
-  
-    return link;
-  });
-  
-  const resetPassword = asyncHandler(async (req, res) => {
-    let passwordResetToken = await Token.findOne({ userId: req.userId });
-  
-    if (!passwordResetToken) {
-      return res.status(400).json({ error: "Invalid or expired password reset token" });
-    }
-  
-    const isValid = await bcrypt.compare(req.body.token, passwordResetToken.token);
-  
-    if (!isValid) {
-      return res.status(400).json({ error: "Invalid or expired password reset token" });
-    }
-  
-    const hash = await bcrypt.hash(req.body.password, Number(bcryptSalt));
-  
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: req.userId },
-      { $set: { password: hash } },
-      { new: true }
-    );
-  
-    if (!updatedUser) {
-      return res.status(404).json({ error: "User not found" });
-    }
-  
-    sendEmail(
-      updatedUser.email,
-      "Password Reset Successfully",
-      { name: updatedUser.name },
-      "./template/resetPassword.handlebars"
-    );
-  
-    await passwordResetToken.deleteOne();
-  
-    return res.status(200).json({ success: true });
-  });
-  
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Password reset link sent successfully.",
+      });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  let passwordResetToken = await Token.findOne({ userId: req.userId });
+
+  if (!passwordResetToken) {
+    return res
+      .status(400)
+      .json({ error: "Invalid or expired password reset token" });
+  }
+
+  const isValid = await bcrypt.compare(
+    req.body.token,
+    passwordResetToken.token
+  );
+
+  if (!isValid) {
+    return res
+      .status(400)
+      .json({ error: "Invalid or expired password reset token" });
+  }
+
+  const hash = await bcrypt.hash(req.body.password, Number(bcryptSalt));
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: req.userId },
+    { $set: { password: hash } },
+    { new: true }
+  );
+
+  if (!updatedUser) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  sendEmail(
+    updatedUser.email,
+    "Password Reset Successfully",
+    { name: updatedUser.name },
+    "./template/resetPassword.handlebars"
+  );
+
+  await passwordResetToken.deleteOne();
+
+  return res.status(200).json({ success: true });
+});
 
 export {
   authUser,
@@ -204,5 +218,5 @@ export {
   getUserProfile,
   updateUserProfile,
   requestPasswordReset,
-  resetPassword
+  resetPassword,
 };

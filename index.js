@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import cookieParser from 'cookie-parser';
 import  cors from 'cors';
 
+
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from './routes/userRoutes.js';
 
@@ -18,7 +19,13 @@ const port = process.env.PORT || 5000;
 
 // Create an Express application
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Enable cookies and other credentials to be sent with the request
+};
+
+app.use(cors(corsOptions));
 
 
 // Middleware for parsing JSON and URL-encoded request bodies
