@@ -7,6 +7,7 @@ import  cors from 'cors';
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from './routes/userRoutes.js';
+import adminRoutes from './routes/adminRoute.js';
 
 // Load environment variables from a .env file
 dotenv.config();
@@ -37,6 +38,7 @@ app.use(cookieParser());
 
 // Route for user-related API endpoints
 app.use('/api/users', userRoutes);
+app.use('/api/admins', adminRoutes);
 
 app.use(notFound);
 
