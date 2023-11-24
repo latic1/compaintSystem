@@ -2,9 +2,9 @@ import mongoose, { Schema } from "mongoose";
 
 const tokenSchema = mongoose.Schema({
   userId: {
-    type: Schema.Types.ObjectId, // Corrected: Use Schema.Types.ObjectId
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: "user",
+    ref: "User",
   },
   token: {
     type: String,
@@ -20,3 +20,5 @@ const tokenSchema = mongoose.Schema({
 const Token = mongoose.model("Token", tokenSchema);
 
 export default Token;
+
+

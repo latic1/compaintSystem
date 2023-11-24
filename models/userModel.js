@@ -16,11 +16,13 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    isAdmin: {
-      type: Boolean,
+    isAdmin: { 
+      type: Boolean, 
+      default: false 
     },
-    isVerified: {
-      type: Boolean,
+    isVerified: { 
+      type: Boolean, 
+      default: false 
     },
   },
   {
@@ -31,6 +33,7 @@ const userSchema = mongoose.Schema(
 // Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
+  
 };
 
 // Encrypt password using bcrypt
@@ -46,5 +49,3 @@ userSchema.pre("save", async function (next) {
 const User = mongoose.model("User", userSchema);
 
 export default User;
-
-

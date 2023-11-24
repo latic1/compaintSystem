@@ -1,21 +1,32 @@
 import nodemailer from 'nodemailer';
 import handlebars from 'handlebars';
 import fs from 'fs';
-// import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const sendEmail = async (email, subject, payload, template) => {
   try {
     // create reusable transporter object using the default SMTP transport
-    var transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
+    // var transport = nodemailer.createTransport({
+    //   host: process.env.EMAIL_HOST,
+    //   port: process.env.EMAIL_PORT,
+    //   secure: true, 
+    //   auth: {
+    //     user: process.env.EMAIL_USER,
+    //     pass: process.env.EMAIL_PASS,
+    //   },
+    // });
+
+    const transport = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: process.env.EMAIL_PORT,
+      secure: true, // Set to false if using port 587
       auth: {
-        user: 'ddea1121d654dd',
-        pass: '598d099adf70df',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
+    
     
   
     
