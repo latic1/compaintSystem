@@ -46,8 +46,6 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
-
-
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
@@ -76,8 +74,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "A link has been send to your email, please click on the link to verify your email.",});
-    
+      message:
+        "A link has been send to your email, please click on the link to verify your email.",
+    });
   } else {
     console.error(error);
     res.status(400);
@@ -137,7 +136,6 @@ const verifyUser = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Public
@@ -196,15 +194,13 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    Request password reset
 // @route   GET /api/users/requestPasswordReset
 // @access  public
 const requestPasswordReset = asyncHandler(async (req, res) => {
-
   const { email } = req.body;
   try {
-    const user = await User.findOne({email:email});
+    const user = await User.findOne({ email: email });
     if (!user) {
       return res.status(404).json({ error: "User does not exist" });
     }
@@ -242,10 +238,8 @@ const requestPasswordReset = asyncHandler(async (req, res) => {
 });
 
 const resetPassword = asyncHandler(async (req, res) => {
-
   const { userId, password } = req.body;
   console.log(userId);
-
 
   let passwordResetToken = await Token.findOne({ userId: userId });
 
@@ -287,7 +281,9 @@ const resetPassword = asyncHandler(async (req, res) => {
 
   await passwordResetToken.deleteOne();
 
-  return res.status(200).json({ success: true,message:"Password reset successful" });
+  return res
+    .status(200)
+    .json({ success: true, message: "Password reset successful" });
 });
 
 export {
