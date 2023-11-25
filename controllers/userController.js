@@ -32,13 +32,15 @@ const authUser = asyncHandler(async (req, res) => {
   }
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    // const token = generateToken(res, user._id);
+    const token = generateToken(user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token:token
     });
   } else {
     res.status(401);
@@ -122,13 +124,14 @@ const verifyUser = asyncHandler(async (req, res) => {
     await user.save();
 
     // Generate and send authentication token
-    generateToken(res, user._id);
+    const authToken = generateToken(user._id);
 
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      token: authToken,
     });
   } catch (error) {
     console.error(error);
