@@ -37,7 +37,7 @@ const registerAdmin = asyncHandler(async (req, res) => {
 });
 
 const getAllUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({ isAdmin: false,isVerified: true  });
+  const users = await User.find({ isAdmin: false,isVerified: true  }).select('-password');
   res.status(201).json(users);
 });
 
