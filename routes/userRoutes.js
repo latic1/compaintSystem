@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   authUser,
   registerUser,
@@ -8,22 +8,33 @@ import {
   requestPasswordReset,
   resetPassword,
   verifyUser,
-} from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
+} from "../controllers/userController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post('/', registerUser);
-router.post('/login', authUser);
-router.post('/logout', logoutUser);
-router
-  .route('/profile')
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile);
+// create a user
+router.post("/", registerUser);
 
-router.post('/requestPasswordReset',requestPasswordReset);
-router.post('/resetPassword',resetPassword);
+// login a user
+router.post("/login", authUser);
 
-router.get('/verify-email/:token', verifyUser);
+//logout a user
+router.post("/logout", logoutUser);
+
+//get a user data
+router.get("/profile", protect, getUserProfile);
+
+//update a user data
+router.put("/profile", protect, updateUserProfile);
+
+//send rest password link by mail
+router.post("/requestPasswordReset", requestPasswordReset);
+
+//reset user password
+router.post("/resetPassword", resetPassword);
+
+// send email verification link by mail
+router.get("/verify-email/:token", verifyUser);
 
 export default router;

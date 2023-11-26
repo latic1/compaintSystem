@@ -8,6 +8,10 @@ import  cors from 'cors';
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoute.js';
+import canvasRoutes from './routes/canvasRoute.js'
+import collaborationRoutes from './routes/collaborationRoute.js'
+import templateRoutes from './routes/templateRoute.js'
+import uploadRoutes from './routes/uploadRoute.js'
 
 // Load environment variables from a .env file
 dotenv.config();
@@ -39,6 +43,10 @@ app.use(cookieParser());
 // Route for user-related API endpoints
 app.use('/api/users', userRoutes);
 app.use('/api/admins', adminRoutes);
+app.use('/api/canvases', canvasRoutes);
+app.use('/api/collaborations', collaborationRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/uploads', uploadRoutes);
 
 app.use(notFound);
 

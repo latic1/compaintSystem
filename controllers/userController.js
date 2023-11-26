@@ -40,6 +40,7 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
       token:token
     });
   } else {
@@ -130,6 +131,7 @@ const verifyUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
       token: authToken,
     });
   } catch (error) {
@@ -161,6 +163,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
     });
   } else {
     res.status(404);
@@ -188,7 +191,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      isAdmin: user.isAdmin,
+      profilePicture: updatedUser.profilePicture,
     });
   } else {
     res.status(404);
