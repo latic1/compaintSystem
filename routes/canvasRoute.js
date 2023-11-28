@@ -11,18 +11,18 @@ import {
 import { protect } from "../middleware/authMiddleware.js";
 
 // Create Canvas
-router.post("/canvases", protect, createCanvas);
+router.post("/", protect, createCanvas);
 
 // Get All Canvases
-router.get("/canvases", protect, getAllCanvas);
+router.get("/", protect, getAllCanvas);
 
 // Get Single Canvas by ID
-router.get("/canvases/:id", protect, getCanvas);
+router.get("/:id", protect, getCanvas);
 
 // Update Canvas by ID
-router.put("/canvases/:id", protect, updateCanvas);
+router.put("/:id", protect, updateCanvas);
 
 // Delete Canvas by ID
-router.delete("/canvases/:id", protect, deleteCanvas);
+router.delete("/:id", protect, deleteCanvas);
 
 export default router;

@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Canvas from "../models/canvasModel.js";
-
+import User from "../models/userModel.js";
 
 // @desc    Get all canvas
 // @route   GET /api/canvases
@@ -15,7 +15,6 @@ const getAllCanvas = asyncHandler(async (req, res) => {
     throw new Error("Server Error");
   }
 });
-
 
 // @desc    Get a canvas by id
 // @route   GET /api/canvas/:id
@@ -34,26 +33,38 @@ const getCanvas = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    Update a canvas
 // @route   PUT /api/canvases/:id
 // @access  Private
 const updateCanvas = asyncHandler(async (req, res) => {
-  try {
-    const { title, description, content } = req.body;
-    const updatedCanvas = await Canvas.findByIdAndUpdate(
-      req.params.id,
-      { title, description, content },
-      { new: true }
-    );
-    if (!updatedCanvas) {
-      return res.status(404).json({ message: "Canvas not found" });
-    }
-    res.json(updatedCanvas);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server Error");
+  const { title, description, content } = req.body;
+  const canvas = await Canvas.findById(req.params.id);
+
+  const user = await User.findById(req.user.id);
+
+  // check for user and canvas existence
+  if (!user || !canvas) {
+    res.status(401);
+    throw new Error("User or Canvas not found");
   }
+
+  // make sure only the authenticated user created this canvas
+  if (canvas.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  const updatedCanvas = await Canvas.findByIdAndUpdate(
+    req.params.id,
+    { title, description, content },
+    { new: true }
+  );
+
+  if (!updatedCanvas) {
+    return res.status(404).json({ message: "Canvas not found" });
+  }
+
+  res.json(updatedCanvas);
 });
 
 
@@ -61,11 +72,11 @@ const updateCanvas = asyncHandler(async (req, res) => {
 // @route   POST /api/canvas
 // @access  Private
 const createCanvas = asyncHandler(async (req, res) => {
-  const { title, description, createdBy, content } = req.body;
+  const { title, description, content } = req.body;
   const newCanvas = await Canvas.create({
     title,
     description,
-    createdBy,
+    createdBy: req.user.id,
     content,
   });
   if (newCanvas) {
@@ -77,28 +88,32 @@ const createCanvas = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc    delete a canvas
 // @route   DELETE /api/canvases
 // @access  Private
 const deleteCanvas = asyncHandler(async (req, res) => {
-  try {
-    const deletedCanvas = await Canvas.findByIdAndDelete(req.params.id);
-    if (!deletedCanvas) {
-      return res.status(404).json({ message: "Canvas not found" });
-    }
+  const user = await User.findById(req.user.id);
+  const canvas = await Canvas.findById(req.params.id);
+
+  // check for user and canvas existence
+  if (!user || !canvas) {
+    res.status(401);
+    throw new Error("User or Canvas not found");
+  }
+
+  // make sure only the authenticated user created this canvas
+  if (canvas.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  const deletedCanvas = await Canvas.findByIdAndDelete(req.params.id);
+
+  if (deletedCanvas) {
     res.json({ message: "Canvas deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500);
-    throw new Error("Server Error");
   }
 });
 
-export {
-  getAllCanvas,
-  getCanvas,
-  updateCanvas,
-  createCanvas,
-  deleteCanvas,
-};
+
+
+export { getAllCanvas, getCanvas, updateCanvas, createCanvas, deleteCanvas };

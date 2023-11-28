@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
@@ -7,6 +8,8 @@ import Token from "../models/tokenModel.js";
 import generateToken from "../utils/generateToken.js";
 import sendEmail from "../utils/email/sendEmail.js";
 import verifyEmail from "../utils/email/verifyEmail.js";
+
+
 
 const bcryptSalt = process.env.BCRYPT_SALT;
 
@@ -291,6 +294,46 @@ const resetPassword = asyncHandler(async (req, res) => {
     .json({ success: true, message: "Password reset successful" });
 });
 
+
+
+
+// Middleware to verify the token
+const verifyToken = asyncHandler(async (req, res) => {
+  const { token } = req.body;
+
+  if (!token) {
+    res.status(400);
+    throw new Error("Token is missing");
+  }
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    // Fetch user details from the database using the decoded user ID
+    const user = await User.findById(decoded.id).select("-password");
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    // If the user is found and the token is valid, send a success response
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401);
+    throw new Error("Invalid token");
+  }
+});
+
+
+
 export {
   authUser,
   registerUser,
@@ -300,4 +343,5 @@ export {
   requestPasswordReset,
   resetPassword,
   verifyUser,
+  verifyToken
 };

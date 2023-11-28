@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
 import Upload from "../models/uploadModel.js";
 
 // @desc    Get all upload
@@ -36,31 +37,46 @@ const getUpload = asyncHandler(async (req, res) => {
 // @route   PUT /api/uploads/:id
 // @access  Private
 const updateUpload = asyncHandler(async (req, res) => {
-  try {
-    const { title, content } = req.body;
-    const upload = await Upload.findByIdAndUpdate(
-      req.params.id,
-      { title, content },
-      { new: true }
-    );
-    if (!upload) {
-      return res.status(404).json({ message: "Upload not found" });
-    }
-    res.json(upload);
-  } catch (error) {
-    console.error(error);
-    throw new Error("Server Error");
+  const { title, content } = req.body;
+
+  const upload = await Upload.findById(req.params.id);
+  const user = await User.findById(req.user.id);
+
+  // check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
   }
+
+  // make sure only the authenticated user created this upload
+  if (!upload || upload.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  const updatedUpload = await Upload.findByIdAndUpdate(
+    req.params.id,
+    { title, content },
+    { new: true }
+  );
+
+  if (!updatedUpload) {
+    return res.status(404).json({ message: "Upload not found" });
+  }
+
+  res.json(updatedUpload);
 });
+
+
 
 // @desc    create a upload
 // @route   POST /api/uploads
 // @access  Private
 const createUpload = asyncHandler(async (req, res) => {
-  const { title,  uploadedBy, content } = req.body;
+  const { title, content } = req.body;
   const upload = await Upload.create({
     title,
-    uploadedBy,
+    uploadedBy: req.user.id,
     content,
   });
   if (upload) {
@@ -76,23 +92,28 @@ const createUpload = asyncHandler(async (req, res) => {
 // @route   DELETE /api/uploads
 // @access  Private
 const deleteUpload = asyncHandler(async (req, res) => {
-  try {
-    const upload = await Upload.findByIdAndDelete(req.params.id);
-    if (!upload) {
-      return res.status(404).json({ message: "Upload not found" });
-    }
-    res.json({ message: "Upload deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500);
-    throw new Error("Server Error");
+  const user = await User.findById(req.user.id);
+
+  // check for user
+  if (!user) {
+    res.status(401);
+    throw new Error("User not found");
   }
+
+  const upload = await Upload.findById(req.params.id);
+
+  // make sure only the authenticated user created this upload
+  if (!upload || upload.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  const deletedUpload = await Upload.findByIdAndDelete(req.params.id);
+
+  res.json({ message: "Upload deleted successfully" });
 });
 
-export {
-  getAllUpload,
-  getUpload,
-  updateUpload,
-  createUpload,
-  deleteUpload,
-};
+
+
+
+export { getAllUpload, getUpload, updateUpload, createUpload, deleteUpload };

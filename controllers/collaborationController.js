@@ -1,15 +1,16 @@
 import Collaboration from "../models/collaborationModel.js";
 import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
 
 // @desc    Create a new collaboration
 // @route   POST /api/collaborations
 // @access  Private
 const createCollaboration = asyncHandler(async (req, res) => {
   try {
-    const { canvasId, createdBy, collaborators } = req.body;
+    const { canvasId, collaborators } = req.body;
     const newCollaboration = await Collaboration.create({
       canvasId,
-      createdBy,
+      createdBy:req.user.id,
       collaborators,
     });
     res.status(201).json(newCollaboration);
@@ -51,17 +52,37 @@ const getCollaboration = asyncHandler(async (req, res) => {
 // @desc    Update a collaboration
 // @route   PUT /api/collaborations/:id
 // @access  Private
+
 const updateCollaboration = asyncHandler(async (req, res) => {
   try {
-    const { canvasId, createdBy, collaborators } = req.body;
+    const { canvasId, collaborators } = req.body;
+
+ 
+    const collaboration = await Collaboration.findById(req.user.id);
+    const user = await User.findById(req.user.id);
+
+    // check for user and canvas existence
+    if (!user || !collaboration) {
+      res.status(401);
+      throw new Error("User or collaboration not found");
+    }
+  
+    // make sure only the authenticated user created this canvas
+    if (collaboration.user.toString() !== req.user.id) {
+      res.status(401);
+      throw new Error("User not authorized");
+    }
+
     const updatedCollaboration = await Collaboration.findByIdAndUpdate(
       req.params.id,
-      { canvasId, createdBy, collaborators },
+      { canvasId, collaborators },
       { new: true }
     );
+
     if (!updatedCollaboration) {
       return res.status(404).json({ message: "Collaboration not found" });
     }
+
     res.json(updatedCollaboration);
   } catch (error) {
     console.error(error);
@@ -69,11 +90,26 @@ const updateCollaboration = asyncHandler(async (req, res) => {
   }
 });
 
+
 // @desc    Delete a collaboration
 // @route   DELETE /api/collaborations/:id
 // @access  Private
 const deleteCollaboration = asyncHandler(async (req, res) => {
   try {
+    const collaboration = await Collaboration.findById(req.user.id);
+    const user = await User.findById(req.user.id);
+
+    // check for user and canvas existence
+    if (!user || !collaboration) {
+      res.status(401);
+      throw new Error("User or collaboration not found");
+    }
+  
+    // make sure only the authenticated user created this canvas
+    if (collaboration.user.toString() !== req.user.id) {
+      res.status(401);
+      throw new Error("User not authorized");
+    }
     const deletedCollaboration = await Collaboration.findByIdAndDelete(
       req.params.id
     );
