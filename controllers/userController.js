@@ -324,6 +324,8 @@ const verifyToken = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      profilePicture: user.profilePicture,
+
     });
   } catch (error) {
     console.error(error);
