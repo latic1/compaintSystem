@@ -25,7 +25,7 @@ const port = process.env.PORT || 5000;
 // Create an Express application
 const app = express();
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:5173',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // Enable cookies and other credentials to be sent with the request
 };
