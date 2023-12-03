@@ -24,13 +24,15 @@ const port = process.env.PORT || 5000;
 
 // Create an Express application
 const app = express();
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true, // Enable cookies and other credentials to be sent with the request
-};
+// const corsOptions = {
+//   origin: 'http://localhost:5173',
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true, Enable cookies and other credentials to be sent with the request
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
+
+// app.use(cors(corsOptions));
 
 
 // Middleware for parsing JSON and URL-encoded request bodies
