@@ -38,7 +38,7 @@ router.post("/resetPassword", resetPassword);
 // send email verification link by mail
 router.get("/verify-email/:token", verifyUser);
 
-router.get("/verify-token",verifyToken);
+router.get("/verify-token/:token",verifyToken);
 
 
 export default router;
