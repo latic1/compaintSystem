@@ -299,8 +299,8 @@ const resetPassword = asyncHandler(async (req, res) => {
 
 // Middleware to verify the token
 const verifyToken = asyncHandler(async (req, res) => {
-  const { token } = req.params.token;
-
+  const token  = req.params.token
+  
   if (!token) {
     res.status(400);
     throw new Error("Token is missing");
