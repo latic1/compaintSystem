@@ -7,6 +7,7 @@ import  cors from 'cors';
 
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import userRoutes from './routes/userRoutes.js';
+import userDashboardRoutes from './routes/userDashboardRoute.js';
 import adminRoutes from './routes/adminRoute.js';
 import canvasRoutes from './routes/canvasRoute.js'
 import collaborationRoutes from './routes/collaborationRoute.js'
@@ -44,6 +45,7 @@ app.use(cookieParser());
 
 // Route for user-related API endpoints
 app.use('/api/users', userRoutes);
+app.use('/api/users/dashboard', userDashboardRoutes);
 app.use('/api/admins', adminRoutes);
 app.use('/api/canvases', canvasRoutes);
 app.use('/api/collaborations', collaborationRoutes);
