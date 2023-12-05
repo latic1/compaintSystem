@@ -10,7 +10,7 @@ import { protect } from "../middleware/authMiddleware.js";
 // router.post("/", protect, createCanvas);
 
 // Get All Canvases
-router.get("/canvas", protect, getAllUserCanvas);
+router.get("/canvas/:id", protect, getAllUserCanvas);
 
 // Get Single Canvas by ID
 // router.get("/:id", protect, getCanvas);

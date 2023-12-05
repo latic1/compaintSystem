@@ -202,6 +202,44 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+
+// @desc    Change user password
+// @route   POST /api/users/change-password
+// @access  Private
+const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    if (newPassword === confirmPassword) {
+      user.password = newPassword;
+    } else {
+      return res.status(400).json({ message: 'New password and confirmed password do not match' });
+    }
+
+    await user.save();
+
+    res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+
+
 // @desc    Request password reset
 // @route   GET /api/users/requestPasswordReset
 // @access  public
@@ -300,7 +338,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 // Middleware to verify the token
 const verifyToken = asyncHandler(async (req, res) => {
   const token  = req.params.token
-  
+
   if (!token) {
     res.status(400);
     throw new Error("Token is missing");
@@ -345,5 +383,6 @@ export {
   requestPasswordReset,
   resetPassword,
   verifyUser,
-  verifyToken
+  verifyToken,
+  changePassword
 };

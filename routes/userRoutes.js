@@ -8,7 +8,8 @@ import {
   requestPasswordReset,
   resetPassword,
   verifyUser,
-  verifyToken
+  verifyToken,
+  changePassword
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -34,6 +35,9 @@ router.post("/requestPasswordReset", requestPasswordReset);
 
 //reset user password
 router.post("/resetPassword", resetPassword);
+
+//change user password
+router.post("/change-password", changePassword);
 
 // send email verification link by mail
 router.get("/verify-email/:token", verifyUser);

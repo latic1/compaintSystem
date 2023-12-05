@@ -7,7 +7,7 @@ import User from "../models/userModel.js";
 // @access  Private
 const getAllUserCanvas = asyncHandler(async (req, res) => {
     // Assuming you have a user ID in your user object
-    const userId = req.user._id;
+    const userId = req.params.id;
   
     try {
       // Find all canvases that belong to the user
