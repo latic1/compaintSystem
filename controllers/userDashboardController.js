@@ -11,7 +11,7 @@ const getAllUserCanvas = asyncHandler(async (req, res) => {
   
     try {
       // Find all canvases that belong to the user
-      const userCanvases = await Canvas.find({ userId });
+      const userCanvases = await Canvas.find({createdBy: userId });
   
       // Check if there are canvases
       if (userCanvases.length > 0) {
