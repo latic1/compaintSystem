@@ -11,20 +11,21 @@ const getAllUserCanvas = asyncHandler(async (req, res) => {
   
     try {
       // Find all canvases that belong to the user
-      const userCanvases = await Canvas.find({createdBy: userId });
+      const userCanvases = await Canvas.find({ createdBy: userId });
   
       // Check if there are canvases
       if (userCanvases.length > 0) {
-        res.json(userCanvases);
+        res.json({ canvases: userCanvases });
       } else {
-        res.status(404).json({ message: 'No canvases found for the user' });
+        res.status(404).json({ error: 'No canvases found for the user' });
       }
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Server Error' });
+      console.error('Error fetching user canvases:', error);
+      res.status(500).json({ error: 'Server Error' });
     }
   });
-
+  
   export { getAllUserCanvas };
+  
 
   
