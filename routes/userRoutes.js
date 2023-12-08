@@ -37,7 +37,7 @@ router.post("/requestPasswordReset", requestPasswordReset);
 router.post("/resetPassword", resetPassword);
 
 //change user password
-router.post("/change-password", changePassword);
+router.put("/change-password",protect, changePassword);
 
 // send email verification link by mail
 router.get("/verify-email/:token", verifyUser);

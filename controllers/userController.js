@@ -158,7 +158,7 @@ const logoutUser = (req, res) => {
 // @route   GET /api/users/profile
 // @access  Private
 const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.userId);
+  const user = await User.findById(req.user._id);
 
   if (user) {
     res.json({
@@ -178,7 +178,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.userId);
+  const user = await User.findById(req.user._id);
 
   if (user) {
     user.name = req.body.name || user.name;
@@ -208,7 +208,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @access  Private
 const changePassword = asyncHandler(async (req, res) => {
   const { currentPassword, newPassword, confirmPassword } = req.body;
-  const userId = req.user.userId;
+  const userId = req.user._id;
 
   try {
     const user = await User.findById(userId);
@@ -217,7 +217,7 @@ const changePassword = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const isMatch = await user.comparePassword(currentPassword);
+    const isMatch = await user.matchPassword(currentPassword);
 
     if (!isMatch) {
       return res.status(401).json({ message: 'Current password is incorrect' });
