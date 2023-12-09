@@ -6,7 +6,9 @@ import Upload from "../models/uploadModel.js";
 // @route   GET /api/uploads
 // @access  Private
 const getAllUpload = asyncHandler(async (req, res) => {
-  const uploads = await Upload.find();
+  const userid = await User.findById(req.user._id);
+
+  const uploads = await Upload.find({uploadedBy:userid});
   if (uploads) {
     res.json(uploads);
   } else {
