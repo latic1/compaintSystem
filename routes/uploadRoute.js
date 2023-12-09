@@ -3,24 +3,21 @@ const router = express.Router();
 import {
     getAllUpload,
     getUpload,
-    updateUpload,
     createUpload,
     deleteUpload,
 } from "../controllers/uploadsController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
 
-// Create upload
-router.post("/", protect, getAllUpload);
+// Create an upload
+router.post("/", protect, createUpload);
 
-// Get All uploads
-router.get("/", protect, getUpload);
+// Get All uploads belonging to a user
+router.get("/", protect, getAllUpload);
 
 // Get Single upload by ID
-router.get("/:id", protect, updateUpload);
+router.get("/:id", protect, getUpload);
 
-// Update upload by ID
-router.put("/:id", protect, createUpload);
 
 // Delete upload by ID
 router.delete("/:id", protect, deleteUpload);
