@@ -49,7 +49,8 @@ const updateCanvas = asyncHandler(async (req, res) => {
   }
 
   // make sure only the authenticated user created this canvas
-  if (canvas.user.toString() !== req.user.id) {
+  console.log(canvas);
+  if (canvas.createdBy.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
   }
