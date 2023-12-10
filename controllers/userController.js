@@ -262,7 +262,8 @@ const requestPasswordReset = asyncHandler(async (req, res) => {
       createdAt: Date.now(),
     }).save();
 
-    const link = `${process.env.CLIENT_URL}/passwordReset?token=${resetToken}&id=${user._id}`;
+    const link = `${process.env.CLIENT_URL}/passwordReset/${resetToken}/${user._id}`;
+    //const link = `${process.env.CLIENT_URL}/passwordReset?token=${resetToken}&id=${user._id}`;
     await sendEmail(
       user.email,
       "Password Reset Request",
