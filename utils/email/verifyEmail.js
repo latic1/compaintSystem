@@ -17,7 +17,8 @@ const verifyEmail = async (user) => {
         createdAt: Date.now(),
     }).save();
 
-    const link = `${process.env.API_URL}/users/api/verify-email/${verificationToken}`;
+    // const link = `${process.env.API_URL}/users/api/verify-email/${verificationToken}`;
+    const link = `${process.env.CLIENT_URL}/emailVerification/${verificationToken}`;
 
     try {
         await sendEmail(
