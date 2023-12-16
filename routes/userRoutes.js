@@ -9,7 +9,7 @@ import {
   resetPassword,
   verifyUser,
   verifyToken,
-  changePassword
+  changePassword,searchUser
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -41,6 +41,9 @@ router.put("/change-password",protect, changePassword);
 
 // send email verification link by mail
 router.get("/verify-email/:token", verifyUser);
+
+// search for a user base of their email
+router.get("/search", searchUser);
 
 router.get("/verify-token/:token",verifyToken);
 

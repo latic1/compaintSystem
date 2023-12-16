@@ -174,6 +174,27 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user profile by search
+// @route   GET /api/users/search
+// @access  Private
+const searchUser = asyncHandler(async (req, res) => {
+
+  const searchEmail = req.query.user;
+  const user = await User.findOne({ email: searchEmail });
+
+  if (user) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
@@ -382,5 +403,6 @@ export {
   resetPassword,
   verifyUser,
   verifyToken,
-  changePassword
+  changePassword,
+  searchUser
 };
