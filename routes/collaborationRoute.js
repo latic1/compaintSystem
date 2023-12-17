@@ -10,18 +10,18 @@ import {
 import { protect } from "../middleware/authMiddleware.js";
 
 // Create Collaboration
-router.post("/collaboration", protect, createCollaboration);
+router.post("", protect, createCollaboration);
 
 // Get All Collaborations
-router.get("/collaboration", protect, getAllCollaboration);
+router.get("", protect, getAllCollaboration);
 
 // Get Single Collaboration by ID
-router.get("/collaboration/:id", protect, getCollaboration);
+router.get("/:id", protect, getCollaboration);
 
 // Update Collaboration by ID
-router.put("/collaboration/:id", protect, updateCollaboration);
+router.put("/:id", protect, updateCollaboration);
 
 // Delete Collaboration by ID
-router.delete("/collaboration/:id", protect, deleteCollaboration);
+router.delete("/:id", protect, deleteCollaboration);
 
 export default router;
