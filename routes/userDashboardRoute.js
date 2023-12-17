@@ -2,6 +2,7 @@ import express from "express";
 const router = express.Router();
 import {
   getAllUserCanvas,
+  getAllUserCollaboration,
 } from "../controllers/userDashboardController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -11,6 +12,9 @@ import { protect } from "../middleware/authMiddleware.js";
 
 // Get All Canvases
 router.get("/canvas/:id", protect, getAllUserCanvas);
+
+// Get All Collaborations belonging to a particular user
+router.get("/collaboration/:id", protect, getAllUserCollaboration);
 
 // Get Single Canvas by ID
 // router.get("/:id", protect, getCanvas);

@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Canvas from "../models/canvasModel.js";
-import User from "../models/userModel.js";
+import Collaboration from "../models/collaborationModel.js";
 
 // @desc    Get all canvases belonging to a particular user
 // @route   GET /api/dashboard/canvases
@@ -24,8 +24,31 @@ const getAllUserCanvas = asyncHandler(async (req, res) => {
       res.status(500).json({ error: 'Server Error' });
     }
   });
+
+
+
+// @desc    Get all collaboration belonging to a particular user
+// @route   GET /api/dashboard/collaboration
+// @access  Private
+  const getAllUserCollaboration =asyncHandler(async(req,res)=>{
+    const userId = req.params.id;
+    try {
+      const collaborations =await Collaboration.find({ createdBy: userId });
+
+      if (collaborations.length>0){
+        res.json({data:collaborations});
+      }else{
+        res.status(404).json({error:'No collaboration found for user'})
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500);
+      throw new Error('server error')
+    }
+  })
   
-  export { getAllUserCanvas };
+  export { getAllUserCanvas,getAllUserCollaboration };
   
+
 
   
