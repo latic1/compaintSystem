@@ -14,7 +14,7 @@ const collaborationSchema = mongoose.Schema(
     },
     name:{
       type:String,
-      required: false,
+      required: true,
     },
     collaborators: {
       type: [mongoose.Schema.Types.ObjectId],

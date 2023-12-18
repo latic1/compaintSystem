@@ -7,19 +7,30 @@ import User from "../models/userModel.js";
 // @access  Private
 const createCollaboration = asyncHandler(async (req, res) => {
   try {
-    const { canvasId, collaborators,name } = req.body;
+    const { canvasId, collaborators, name } = req.body;
+
+    // Check if a collaboration with the given canvasId already exists
+    const existingCollaboration = await Collaboration.findOne({ canvasId });
+
+    if (existingCollaboration) {
+      return res.status(400).json({ message: "Collaboration already exists" });
+    }
+
+    // Create a new collaboration
     const newCollaboration = await Collaboration.create({
       canvasId,
-      createdBy:req.user.id,
+      createdBy: req.user.id,
       collaborators,
-      name
+      name,
     });
+
     res.status(201).json(newCollaboration);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
   }
 });
+
 
 // @desc    Get all collaboration
 // @route   GET /api/collaborations
