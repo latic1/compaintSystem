@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const collaborationSchema = mongoose.Schema(
   {
-    CanvasId: {
+    canvasId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "Canvas",
