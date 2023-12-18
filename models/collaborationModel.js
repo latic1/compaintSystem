@@ -12,6 +12,10 @@ const collaborationSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    name:{
+      type:String,
+      required: false,
+    },
     collaborators: {
       type: [mongoose.Schema.Types.ObjectId],
       required: true,

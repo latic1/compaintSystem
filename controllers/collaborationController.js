@@ -7,11 +7,12 @@ import User from "../models/userModel.js";
 // @access  Private
 const createCollaboration = asyncHandler(async (req, res) => {
   try {
-    const { canvasId, collaborators } = req.body;
+    const { canvasId, collaborators,name } = req.body;
     const newCollaboration = await Collaboration.create({
       canvasId,
       createdBy:req.user.id,
       collaborators,
+      name
     });
     res.status(201).json(newCollaboration);
   } catch (error) {
