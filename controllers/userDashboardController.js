@@ -33,7 +33,7 @@ const getAllUserCanvas = asyncHandler(async (req, res) => {
   const getAllUserCollaboration =asyncHandler(async(req,res)=>{
     const userId = req.params.id;
     try {
-      const collaborations =await Collaboration.find({ createdBy: userId });
+      const collaborations =await Collaboration.find({ createdBy: userId }).populate("collaborators");
 
       if (collaborations.length>0){
         res.json({data:collaborations});

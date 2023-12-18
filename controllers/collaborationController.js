@@ -25,7 +25,7 @@ const createCollaboration = asyncHandler(async (req, res) => {
 // @access  Private
 const getAllCollaboration = asyncHandler(async (req, res) => {
   try {
-    const collaborations = await Collaboration.find();
+    const collaborations = await Collaboration.find().populate("collaborators");
     res.json(collaborations);
   } catch (error) {
     console.error(error);
@@ -38,7 +38,7 @@ const getAllCollaboration = asyncHandler(async (req, res) => {
 // @access  Private
 const getCollaboration = asyncHandler(async (req, res) => {
   try {
-    const collaboration = await Collaboration.findById(req.params.id);
+    const collaboration = await Collaboration.findById(req.params.id).populate("collaborators");
     if (!collaboration) {
       return res.status(404).json({ message: "Collaboration not found" });
     }
