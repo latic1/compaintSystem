@@ -6,7 +6,6 @@ import {
   updateCanvas,
   createCanvas,
   deleteCanvas,
-  verifyCanvas,
 } from "../controllers/canvasController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -25,8 +24,5 @@ router.put("/:id", protect, updateCanvas);
 
 // Delete Canvas by ID
 router.delete("/:id", protect, deleteCanvas);
-
-//verify canvas ID
-router.get("/verify/:id", protect, verifyCanvas);
 
 export default router;
