@@ -116,5 +116,19 @@ const deleteCanvas = asyncHandler(async (req, res) => {
 });
 
 
+// @desc    verify a canvas id
+// @route   DELETE /api/canvases/verify/:id
+// @access  Private
+const verifyCanvas = asyncHandler(async(req,res) =>{
+  const canvas = await Canvas.findByI(req.params.id);
+  if(!canvas){
+    res.status(401);
+    throw new Error("Canvas not found")
+  }
+  res.status(201).json(canvas);
 
-export { getAllCanvas, getCanvas, updateCanvas, createCanvas, deleteCanvas };
+
+})
+
+
+export { getAllCanvas, getCanvas, updateCanvas, createCanvas, deleteCanvas,verifyCanvas };
