@@ -125,8 +125,17 @@ const shearCanvas = asyncHandler(async (req, res) => {
     throw new Error("canvas not found");
   }
 
+  // Update the locked property to true for the first element in the content array
+  if (canvas.content && canvas.content.length > 0) {
+    canvas.content[0].locked = true;
+  }
+
+  // Save the updated canvas
+  await canvas.save();
+
   res.status(200).json(canvas);
 });
+
 
 export {
   getAllCanvas,

@@ -27,6 +27,6 @@ router.put("/:id", protect, updateCanvas);
 router.delete("/:id", protect, deleteCanvas);
 
 // shear Canvas by ID
-router.delete("/share/:id", shearCanvas);
+router.get("/share/:id", shearCanvas);
 
 export default router;
