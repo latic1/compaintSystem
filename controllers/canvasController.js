@@ -68,7 +68,6 @@ const updateCanvas = asyncHandler(async (req, res) => {
   res.json(updatedCanvas);
 });
 
-
 // @desc    create a canvas
 // @route   POST /api/canvas
 // @access  Private
@@ -115,6 +114,25 @@ const deleteCanvas = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    shear a canvas
+// @route   GET /api/canvases/shear
+// @access  public
+const shearCanvas = asyncHandler(async (req, res) => {
+  const canvas = await Canvas.findById(req.params.id);
 
+  if (!canvas) {
+    res.status(400);
+    throw new Error("canvas not found");
+  }
 
-export { getAllCanvas, getCanvas, updateCanvas, createCanvas, deleteCanvas };
+  res.status(200).json(canvas);
+});
+
+export {
+  getAllCanvas,
+  getCanvas,
+  updateCanvas,
+  createCanvas,
+  deleteCanvas,
+  shearCanvas,
+};

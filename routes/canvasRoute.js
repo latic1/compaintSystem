@@ -6,6 +6,7 @@ import {
   updateCanvas,
   createCanvas,
   deleteCanvas,
+  shearCanvas,
 } from "../controllers/canvasController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -24,5 +25,8 @@ router.put("/:id", protect, updateCanvas);
 
 // Delete Canvas by ID
 router.delete("/:id", protect, deleteCanvas);
+
+// shear Canvas by ID
+router.delete("/shear/:id", shearCanvas);
 
 export default router;
