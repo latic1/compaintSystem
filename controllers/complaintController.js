@@ -38,7 +38,7 @@ const getComplaint = async (req, res) => {
 };
 
 // Update a complaint by ID
-const UpdateComplaint = async (req, res) => {
+const updateComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.findByIdAndUpdate(
       req.params.id,
@@ -55,7 +55,7 @@ const UpdateComplaint = async (req, res) => {
 };
 
 // Delete a complaint by ID
-const delateComplaint = async (req, res) => {
+const deleteComplaint = async (req, res) => {
   try {
     const complaint = await Complaint.findByIdAndDelete(req.params.id);
     if (!complaint) {
@@ -71,6 +71,6 @@ export {
   newComplaint,
   getAllComplaints,
   getComplaint,
-  UpdateComplaint,
-  delateComplaint,
+  updateComplaint,
+  deleteComplaint,
 };

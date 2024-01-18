@@ -1,28 +1,27 @@
 import express from "express";
 import {
-    newComplaint,
-    getAllComplaints,
-    getComplaint,
-    UpdateComplaint,
-    delateComplaint,
+  newComplaint,
+  getAllComplaints,
+  getComplaint,
+  updateComplaint,
+  deleteComplaint,
 } from "../controllers/complaintController.js";
 
 const router = express.Router();
 
-// create a user
+// Create a new complaint
 router.post("/", newComplaint);
 
-// login a user
+// Get all complaints
 router.get("/", getAllComplaints);
 
-//logout a user
-router.get("/", getComplaint);
+// Get a single complaint by ID
+router.get("/:id", getComplaint);
 
-//get a user data
-router.put("/", UpdateComplaint);
+// Update a complaint by ID
+router.put("/:id", updateComplaint);
 
-//update a user data
-router.delete("/", delateComplaint);
-
+// Delete a complaint by ID
+router.delete("/:id", deleteComplaint);
 
 export default router;
